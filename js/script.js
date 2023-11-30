@@ -9,9 +9,9 @@ function checkUniqueBomb(array_bombs){
     }
     return bomb
 }
-function bombMaker(){
+function bombMaker(bombs){
     let array_bombs = []
-    for(let i=0;i<16;i++){
+    for(let i=0;i<bombs;i++){
         array_bombs.push(checkUniqueBomb(array_bombs))
     }
     return array_bombs
@@ -25,10 +25,27 @@ function cellMaker(num){
 
 function newGame(){
     const grid = document.getElementById('grid')
+    const nBombs = 16;
+    const bomb = bombMaker(nBombs)
+    let points = 0 
+    let gameOver = true
     for(let i=0;i<100;i++){
         let square = cellMaker(i+1)
         square.addEventListener("click",function(){
-            this.classList.add('cyan')
+            if(gameOver){
+                if(bomb.includes(i+1)){
+                    this.classList.add('red')
+                    gameOver = false
+                }
+                else{
+                    this.classList.add('cyan')
+                    points++
+                    document.getElementById('points').innerText = `Punteggio: ${points}`
+                    if(points == 84){
+                        gameOver = false
+                    }
+                }
+            }
         })
         grid.appendChild(square)
     }
